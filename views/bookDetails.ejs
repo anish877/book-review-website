@@ -1,0 +1,69 @@
+<%- include("partials/head.ejs") %>
+<div>
+    <h1 style="text-align: center; color: whitesmoke; font-family: 'Gentium Book Plus', serif; font-weight: 400; font-style: normal; font-size: 2rem; margin-bottom: 50px;"><%= book_title %></h1>
+    <form action="/submitBookReview" method="post">
+        <div style="display: flex; justify-content: center;">
+            <div style="display: flex; gap: 10%; justify-content: space-around; align-items: center; width: 70%;">
+                <img src="https://covers.openlibrary.org/b/olid/<%= cover_id %>.jpg" alt="" height="350px" width="250px" style="box-shadow: #a688fa3c 0px 50px 100px -20px, #a688fa3c 0px 30px 60px -30px, #a688fa3c 0px -2px 6px 0px inset; border-radius: 12px;">
+                <textarea name="reviewOfBook" id="" style="background-color: #191919; height: 55vh; width: 100%; border-radius: 12px; border: 0px; color: whitesmoke; font-size: 1.3rem; font-family: cursive; padding: 20px;" required></textarea>   
+                <input type="hidden" value="<%= book_title %>" name="book_title">
+                <input type="hidden" value="<%= cover_id %>" name="cover_id">
+                <input type="hidden" value="<%= book_id %>" name="book_id">   
+            </div>
+        </div>
+        <div class="container" style="display: inline-block; height: 50px; width: 200px; margin-top: 4%; margin-bottom: 3%;">
+            <div class="container__items">
+                <input type="radio" name="rating" value="5" id="st5" required>
+                <label for="st5">
+                <div class="star-stroke">
+                    <div class="star-fill"></div>
+                </div>
+                <div class="label-description" data-content="Excellent"></div>
+                </label>
+                <input type="radio" name="rating" value="4" id="st4" >
+                <label for="st4">
+                <div class="star-stroke">
+                    <div class="star-fill"></div>
+                </div>
+                <div class="label-description" data-content="Good"></div>
+                </label>
+                <input type="radio" name="rating" value="3" id="st3">
+                <label for="st3">
+                <div class="star-stroke">
+                    <div class="star-fill"></div>
+                </div>
+                <div class="label-description" data-content="OK"></div>
+                </label>
+                <input type="radio" name="rating" value="2" id="st2">
+                <label for="st2">
+                <div class="star-stroke">
+                    <div class="star-fill"></div>
+                </div>
+                <div class="label-description" data-content="Bad"></div>
+                </label>
+                <input type="radio" name="rating" value="1" id="st1">
+                <label for="st1">
+                <div class="star-stroke">
+                    <div class="star-fill"></div>
+                </div>
+                
+                <div class="label-description" data-content="Terrible"></div>
+                </label>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <div class="wrapper">
+                <button class="submitButton">
+                  <span2>Post!</span2>
+                  <div class="success">
+                  <svg xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"  viewBox="0 0 29.756 29.756" style="enable-background:new 0 0 29.756 29.756;" xml:space="preserve">
+                    
+                  <path d="M29.049,5.009L28.19,4.151c-0.943-0.945-2.488-0.945-3.434,0L10.172,18.737l-5.175-5.173   c-0.943-0.944-2.489-0.944-3.432,0.001l-0.858,0.857c-0.943,0.944-0.943,2.489,0,3.433l7.744,7.752   c0.944,0.943,2.489,0.943,3.433,0L29.049,8.442C29.991,7.498,29.991,5.953,29.049,5.009z"/>
+               </svg>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<%- include("partials/foot.ejs") %>

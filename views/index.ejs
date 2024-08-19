@@ -1,0 +1,58 @@
+<%- include("partials/head.ejs") %>
+<div id="container">
+  <span id="text1"></span>
+  <span id="text2"></span>
+</div>
+
+<svg id="filters">
+  <defs>
+      <filter id="threshold">
+          <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 255 -140" />
+      </filter>
+  </defs>
+</svg>
+<div style="justify-content: center; width: 100%; height: 100vh; display: flex; align-items: center;">
+  <form action="/bookSearch">
+      <input type="submit" value="+" id="newPostButton" style="filter: drop-shadow(#a688fa36 0.1rem 0.1rem 3px);">
+  </form>
+</div>
+<div id="shortByButtons" orderBy = "<%= orderBy %>" style="display: flex; gap: 15px; width: 100%; justify-content: center;">
+  <a href="/orderByNewest"><button type="submit" id="newest" class="orderButton">Latest</button></a>
+  <a href="/orderByOldest"><button type="submit" id="oldest" class="orderButton">Oldest</button></a>
+  <a href="/orderByRating"><button type="submit" id="rating" class="orderButton">Rating</button></a>
+</div>
+<ul class="cards">
+    <% books.forEach(element => { %>
+        <li>
+            <form action="/viewBookReview" method="post">
+                <input type="hidden" value="<%= element.id %>" name="book_id">
+                <input type="hidden" value="<%= element.cover_id %>" name="cover_id">
+                <button type="submit" style="background: none;color: inherit;border: none;padding: 0;font: inherit;outline: inherit;">
+                    <a href="" class="card">
+                        <img src="https://covers.openlibrary.org/b/olid/<%= element.cover_id %>.jpg" class="card__image" alt="" style="width: 300px; height: 400px; border: 10px solid #191919;"/>
+                        <div class="card__overlay">
+                          <div class="card__header">
+                            <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>                     
+                            <!-- <img class="card__thumb" src="https://i.imgur.com/7D7I6dI.png" alt="" /> -->
+                            <div class="card__header-text">
+                              <h3 class="card__title" style="text-align: center;"><%= element.book_name %></h3>            
+                              <div style="display: inline-block; gap: 10px;">
+                                <span class="card__status"><%= element.date_stamp %></span>
+                                <% for (let i = 0; i < element.rating; i++) { %>
+                                  <img src="/images/icons8-star-filled-48.png" alt="" height="13">
+                                <% } %> 
+                              </div>
+                            </div>
+                          </div>
+                          <p class="card__description"><span style="color: white">"</span><%= element.book_review %></p>
+                        </div>
+                      </a> 
+                </button> 
+            </form>    
+          </li>  
+    <% }); %> 
+  </ul>
+<%- include("partials/foot.ejs") %>

@@ -1,0 +1,32 @@
+<%- include("partials/head.ejs") %>
+<div style="width: 100%; display: flex; justify-content: center; height: 100vh; align-items: center;">
+    <div style="display: inline-block;">
+        <div>
+            <form action="/bookSearchResultList" method="post">
+                <h1 style="text-align: center; color: whitesmoke; font-family: cursive; font-size: 2rem; margin-bottom: 50px;">Whts the lucky book?</h1>
+                <div style="display: flex">
+                    <div style="height: 50px; background-color: #282828; width: 24px; display: flex; align-items: center; border-top-left-radius: 12px; padding: 3px;">
+                        <img src="/images/icons8-search-24.png" alt="" style="background-color: #282828;">
+                    </div>
+                    <input id="search" type="text" placeholder="Search..."   required name="bookName" autocomplete="off" />
+                    <button type="submit" value="search" id="searchSubmitButton">Go</button>
+                </div>
+            </form>
+        </div>
+        <div style="max-height: 60vh; overflow: scroll; width: 574px; overflow-x: scroll;" id="searchList">
+            <% bookSearchList.forEach(element => {%>
+                <div style="display: inline;" class="searchResultBook" id="searchListRow">
+                    <form action="/bookDetails" method="post" id="bookSearchResultRow" class="form">
+                        <input type="hidden" name="cover_id" value="<%= element.cover_id %>">
+                        <input type="hidden" name="book_title" value="<%= element.book_title %>">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <img src="https://covers.openlibrary.org/b/olid/<%= element.cover_id %>.jpg" alt="" width="40" height="60">
+                            <h3 style="font-family: 'Gentium Book Plus', serif; font-weight: 400; font-style: normal;"><%= element.book_title %></h3>
+                        </div>
+                    </form>
+                </div>
+            <%}); %>
+        </div>
+    </div>
+</div>
+<%- include("partials/foot.ejs") %>
