@@ -13,6 +13,8 @@
   
   body {
     /* font-family: 'Noto Sans JP', sans-serif; */
+  font-family: "Signika Negative", sans-serif;
+  font-style: normal;
     background-color: #121212;
     margin: 0;
     padding: 0;
@@ -97,7 +99,7 @@
   }
   
   .card__title {
-    font-size: 1em;
+    font-size: 1.5rem;
     margin: 0 0 .3em;
     color: whitesmoke;
   }
@@ -111,7 +113,7 @@
   }
   
   .card__status {
-    font-size: .8em;
+    font-size: .9rem;
     color: #a688fa;
   }
   

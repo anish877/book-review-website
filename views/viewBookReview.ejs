@@ -1,5 +1,5 @@
 <%- include("partials/head.ejs") %>
-<h1 style="text-align: center; color: whitesmoke; font-family: 'Gentium Book Plus', serif; font-weight: 400; font-style: normal; font-size: 2rem; margin-bottom: 50px; font-family: cursive;"><%= book_title %></h1>
+<h1 style="text-align: center; color: whitesmoke; font-family: 'Gentium Book Plus', serif; font-weight: 400; font-style: normal; font-size: 2rem; margin-bottom: 50px;  "><%= book_title %></h1>
 <div style="display: flex; justify-content: center;">
   <div style="display: flex; background: #191919; gap: 100px; width: 80%; border-radius: 12px;">
     <div style="display: inline-block;">
@@ -15,7 +15,7 @@
         <% } %> 
       </div>
       </div>
-        <p style="color: rgb(186, 186, 186); font-size: 1.3rem; font-family: cursive;"><span>"</span><%= book_review %><span>"</span></p>
+        <p style="color: rgb(186, 186, 186); font-size: 1.3rem;  "><span>"</span><%= book_review %><span>"</span></p>
       <div>
     </div>
   </div>
@@ -29,7 +29,7 @@
   </div>
 </form>
   <% if(locals.otherResponse){ %>
-      <h2 style="font-size: 2rem; font-family: cursive; color: whitesmoke; padding-left: 50px;">other's view</h2>
+      <h2 style="font-size: 2rem;   color: whitesmoke; padding-left: 50px;">other's view</h2>
       <div style="display: flex; justify-content: center; ">
         <div style=" width: 70%; border-radius: 12px;">
           <ul class="cards">
