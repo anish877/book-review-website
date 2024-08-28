@@ -1,24 +1,15 @@
 import e from "express";
 import bodyParser from "body-parser";
 import axios from "axios"
-import pg from "pg"
 import { format, render, cancel, register } from 'timeago.js';
+import { createClient } from '@supabase/supabase-js'
 
+
+const supabase = createClient('https://ilseygwhapzpptcmyvjs.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc2V5Z3doYXB6cHB0Y215dmpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ1NTE2MjEsImV4cCI6MjA0MDEyNzYyMX0.fnDMsjPfjSaAo8-0iZfy_D35J90Qkyp-TUdPNls93_4')
 const app = e();
 const port = 3000;
 var bookSearchList = [];
-var db = new pg.Client(
-    {
-        user: "postgres",
-        host: "localhost",
-        database: "book-review-website",
-        password: "anish2305@",
-        port: 5432
-    }
-)
 var orderBy = "newest" ;
-
-db.connect();
 
 app.use(e.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
@@ -27,23 +18,34 @@ app.get("/",async (req,res)=>{
     var response;
     if(orderBy === "newest")
     {
-        response = await db.query("SELECT * FROM book_review ORDER BY date_stamp DESC")
+        response = await supabase
+        .from('book_review')
+        .select('*')
+        .order('date_stamp', { ascending: false })
+
+
     }
     else if (orderBy === "oldest")
     {
-        response = await db.query("SELECT * FROM book_review ORDER BY date_stamp ASC")
+        response = await supabase
+        .from('book_review')
+        .select('*')
+        .order('date_stamp', { ascending: true })
     }
     else if(orderBy === "rating")
     {
-        response = await db.query("SELECT * FROM book_review ORDER BY rating DESC")
+        response = await supabase
+        .from('book_review')
+        .select('*')
+        .order('rating', { ascending: false })
     }
-    response.rows.forEach(element=>{
+    response.data.forEach(element=>{
         element.date_stamp = format(element.date_stamp);
     })
     res.render("index.ejs",
         {
             orderBy: orderBy,
-            books: response.rows
+            books: response.data
         }
     );
 });
@@ -82,17 +84,23 @@ app.post("/bookDetails", (req,res)=>{
 });
 
 app.post("/submitBookReview", async (req,res)=>{
-
     const date = new Date();
     let time = date.getTime();
-    await db.query("INSERT INTO book_review (book_name,cover_id,book_review,rating,date_stamp) VALUES ($1,$2,$3,$4,$5)",[req.body.book_title,req.body.cover_id,req.body.reviewOfBook,req.body.rating,time]);
-    // await db.query("UPDATE book_review SET likes = likes + ($1) WHERE id = ($2)",[parseInt(req.body.likes),req.body.book_id]);
+    await supabase
+    .from('book_review')
+    .insert([{book_name: req.body.book_title, cover_id: req.body.cover_id, book_review: req.body.reviewOfBook, rating: req.body.rating, date_stamp: time}])
     res.redirect("/");
 });
 
 app.post("/viewBookReview", async (req,res)=>{
-    const response = await db.query("SELECT * FROM book_review WHERE id = ($1)",[req.body.book_id]);
-    const responseListOfSameBookName = (await db.query("SELECT * FROM book_review WHERE cover_id = ($1)",[req.body.cover_id])).rows
+    let { data: response, error } = await supabase
+    .from('book_review')
+    .select("*")
+    .eq('id', req.body.book_id)
+    let { data: responseListOfSameBookName, err } = await supabase
+    .from('book_review')
+    .select("*")
+    .eq('cover_id', req.body.cover_id)    
     responseListOfSameBookName.forEach(element=>{
         element.date_stamp = format(element.date_stamp);
     })
@@ -102,11 +110,11 @@ app.post("/viewBookReview", async (req,res)=>{
     }
     res.render("viewBookReview.ejs",
         {
-            cover_id : response.rows[0].cover_id,
-            book_title : response.rows[0].book_name,
-            book_review : response.rows[0].book_review,
-            rating : response.rows[0].rating,
-            book_id : response.rows[0].id,
+            cover_id : response[0].cover_id,
+            book_title : response[0].book_name,
+            book_review : response[0].book_review,
+            rating : response[0].rating,
+            book_id : response[0].id,
             otherResponse : responseListOfSameBookName
         }
     );
@@ -129,6 +137,14 @@ app.get("/orderByRating", (req,res)=>{
 
 app.get("/home", (req,res)=>{
     res.redirect("/");
+});
+
+app.get("/github", (req,res)=>{
+    res.redirect("https://github.com/anish877/book-review-website");
+});
+
+app.get("/contactUs", (req,res)=>{
+    res.redirect("https://anish877.github.io/portfolio/");
 })
 
 app.listen(port, console.log(`Server started at port ${port}.`));
